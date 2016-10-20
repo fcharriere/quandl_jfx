@@ -18,9 +18,11 @@ import org.quandl.jfx.view.DataSetFX;
 public class CreateWIKIDBTask extends Task<ObservableList<DataSetFX>> {
 
     private final ObservableList<DataSetFX> data;
+    private final ObservableList<DataSetFX> completeData;
 
-    public CreateWIKIDBTask(ObservableList<DataSetFX> data) {
+    public CreateWIKIDBTask(ObservableList<DataSetFX> data, ObservableList<DataSetFX> completeData) {
         this.data = data;
+        this.completeData = completeData;
     }
     
     @Override
@@ -65,6 +67,7 @@ public class CreateWIKIDBTask extends Task<ObservableList<DataSetFX>> {
 
         ObservableList<DataSetFX> xs = FXCollections.observableArrayList(dsfxs);
         data.addAll(xs);
+        completeData.addAll(xs);
         
         return xs;
     }
