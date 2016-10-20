@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import org.quandl.jfx.model.wiki.DataSet;
-import org.quandl.jfx.view.DataSetFX;
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 
 /**
  *

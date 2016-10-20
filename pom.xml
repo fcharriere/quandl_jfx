@@ -29,7 +29,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.quandl.jfx.view.QuandlFX_Main</mainClass>
+                            <mainClass>org.quandl.jfx.view.QuandlFX</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.quandl.jfx.view.QuandlFX_Main</mainClass>
+                            <mainClass>org.quandl.jfx.view.QuandlFX</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

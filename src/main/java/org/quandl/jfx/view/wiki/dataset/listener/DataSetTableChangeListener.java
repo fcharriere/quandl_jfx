@@ -1,11 +1,11 @@
-package org.quandl.jfx.view.wiki.listener;
+package org.quandl.jfx.view.wiki.dataset.listener;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
-import org.quandl.jfx.view.DataSetFX;
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 import org.quandl.jfx.view.wiki.tasks.AddWikiStockTabTask;
 
 /**

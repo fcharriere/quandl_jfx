@@ -1,5 +1,6 @@
 package org.quandl.jfx.view;
 
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -7,7 +8,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -26,16 +26,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.quandl.jfx.view.wiki.DataSetTableViewSkin;
-import org.quandl.jfx.view.wiki.listener.DataSetFilterListener;
-import org.quandl.jfx.view.wiki.listener.DataSetTableChangeListener;
-import org.quandl.jfx.view.wiki.tasks.CreateWIKIDBTask;
+import org.quandl.jfx.view.wiki.dataset.DataSetTableViewSkin;
+import org.quandl.jfx.view.wiki.dataset.listener.DataSetFilterListener;
+import org.quandl.jfx.view.wiki.dataset.listener.DataSetTableChangeListener;
+import org.quandl.jfx.view.wiki.dataset.task.CreateWIKIDBTask;
 
 /**
  *
  * @author frederic
  */
-public class QuandlFX_Main extends Application {
+public class QuandlFX extends Application {
 
     private final TableView<DataSetFX> table = new TableView<>();
     private final TabPane tabPane = new TabPane();

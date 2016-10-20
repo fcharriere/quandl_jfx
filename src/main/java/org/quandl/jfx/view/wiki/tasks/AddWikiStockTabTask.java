@@ -12,7 +12,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import org.quandl.jfx.model.wiki.Stock;
 import org.quandl.jfx.utils.connectors.quandl.wiki.WIKIConnector;
-import org.quandl.jfx.view.DataSetFX;
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 import org.quandl.jfx.view.wiki.ChartStock;
 import org.quandl.jfx.view.wiki.TableStock;
 import org.quandl.jfx.view.wiki.WIKIStockFX;

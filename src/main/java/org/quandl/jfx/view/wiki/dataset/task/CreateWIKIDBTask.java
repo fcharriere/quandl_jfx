@@ -1,4 +1,4 @@
-package org.quandl.jfx.view.wiki.tasks;
+package org.quandl.jfx.view.wiki.dataset.task;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import javafx.concurrent.Task;
 import org.quandl.jfx.model.wiki.DataSet;
 import org.quandl.jfx.utils.Utils;
 import org.quandl.jfx.utils.connectors.db.DBConnector;
-import org.quandl.jfx.view.DataSetFX;
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 
 /**
  *

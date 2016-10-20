@@ -1,4 +1,4 @@
-package org.quandl.jfx.view.wiki.listener;
+package org.quandl.jfx.view.wiki.dataset.listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import org.quandl.jfx.view.DataSetFX;
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 
 /**
  *

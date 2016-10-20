@@ -1,9 +1,8 @@
-package org.quandl.jfx.view.wiki;
+package org.quandl.jfx.view.wiki.dataset;
 
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import org.quandl.jfx.view.DataSetFX;
 
 /**
  *

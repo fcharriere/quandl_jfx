@@ -1,4 +1,4 @@
-package org.quandl.jfx.view;
+package org.quandl.jfx.view.wiki.dataset;
 
 import javafx.beans.property.SimpleStringProperty;
 
