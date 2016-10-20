@@ -78,6 +78,7 @@ public class QuandlFX_Main extends Application {
         VBox.setVgrow(table, Priority.ALWAYS);
         vBox.getChildren().addAll(table);
         vBox.setStyle("-fx-background-color: #336699;");
+        vBox.setPrefWidth(350D);
 
 //        MID
         Tab tab = new Tab();
