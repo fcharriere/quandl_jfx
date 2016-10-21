@@ -22,7 +22,6 @@ public class WIKIConnector {
     public List<Stock> getStocks(String code) throws IOException{
         
         String request = "https://www.quandl.com/api/v3/datasets/WIKI/" + code + ".csv?api_key=" + WIKIConnector.API_KEY;
-        System.out.println(request);
         
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(request);
@@ -33,7 +32,6 @@ public class WIKIConnector {
         String all = "";
         
         try {
-//            System.out.println(response1.getStatusLine());
             HttpEntity entity1 = response1.getEntity();
             all = EntityUtils.toString(entity1);
         } finally {

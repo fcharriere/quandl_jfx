@@ -1,11 +1,13 @@
 package org.quandl.jfx.view;
 
+import java.util.List;
 import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -22,14 +25,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.quandl.jfx.view.wiki.dataset.DataSetTableViewSkin;
+import org.quandl.jfx.view.wiki.dataset.event.DataSetFXEventHandler;
 import org.quandl.jfx.view.wiki.dataset.listener.DataSetFilterListener;
-import org.quandl.jfx.view.wiki.dataset.listener.DataSetTableChangeListener;
 import org.quandl.jfx.view.wiki.dataset.task.CreateWIKIDBTask;
+import org.quandl.jfx.view.wiki.tasks.AddWikiStockTabTask;
 
 /**
  *
@@ -45,12 +50,11 @@ public class QuandlFX extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        setUserAgentStylesheet(STYLESHEET_CASPIAN);
+//        setUserAgentStylesheet(STYLESHEET_CASPIAN);
 
-        DataSetTableChangeListener listener = new DataSetTableChangeListener(table, tabPane);
-        table.getSelectionModel().selectedItemProperty().addListener(listener);
         table.setEditable(true);
-        
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         BorderPane borderPane = new BorderPane();
 
 //        MENU
@@ -83,11 +87,23 @@ public class QuandlFX extends Application {
         });
 
 //        LEFT
+
+        HBox hbox = new HBox();
+        
         TextField textField = new TextField();
         textField.textProperty().addListener(new DataSetFilterListener(data, complete_data));
+        hbox.setHgrow(textField, Priority.ALWAYS);
+
+        Button clearTextFieldButton = new Button("",new ImageView(new Image("icons/ic_close_black_18dp.png", 14, 14, false, false)));
+        hbox.getChildren().addAll(textField,clearTextFieldButton);
         
-        Button button = new Button("Select");
-        button.setPrefWidth(Double.MAX_VALUE);
+        clearTextFieldButton.setOnAction((ActionEvent event) -> { textField.clear();});
+        
+        Button selectDataSetButton = new Button("Select");
+        selectDataSetButton.setPrefHeight(50D);
+        selectDataSetButton.setPrefWidth(Double.MAX_VALUE);
+
+        selectDataSetButton.setOnAction(new DataSetFXEventHandler(table, tabPane));
 
         TableColumn<DataSetFX, String> codeColumn = new TableColumn<DataSetFX, String>("Code");
         codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -100,7 +116,8 @@ public class QuandlFX extends Application {
 
         VBox vBox = new VBox();
         VBox.setVgrow(table, Priority.ALWAYS);
-        vBox.getChildren().addAll(textField, table, button);
+        vBox.getChildren().addAll(hbox, table, selectDataSetButton);
+//        vBox.getChildren().addAll(textField, table, selectDataSetButton);
         vBox.setStyle("-fx-background-color: #336699;");
         vBox.setPrefWidth(500D);
 
@@ -117,7 +134,7 @@ public class QuandlFX extends Application {
         primaryStage.setMaximized(true);
         primaryStage.show();
 
-        Thread t = new Thread(new CreateWIKIDBTask(data,complete_data));
+        Thread t = new Thread(new CreateWIKIDBTask(data, complete_data));
         t.setDaemon(true);
         t.start();
 
