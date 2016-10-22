@@ -2,6 +2,7 @@ package org.quandl.jfx.utils.connectors.quandl.wiki;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -44,6 +45,8 @@ public class WIKIConnector {
             Stock stock = Stock.stockFromString(r[i]);
             result.add(stock);
         }
+        
+        Collections.sort(result);
         
         return result;
     }

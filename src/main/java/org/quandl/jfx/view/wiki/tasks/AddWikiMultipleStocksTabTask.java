@@ -1,14 +1,10 @@
 package org.quandl.jfx.view.wiki.tasks;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,12 +25,10 @@ import org.quandl.jfx.view.wiki.dataset.DataSetFX;
  */
 public class AddWikiMultipleStocksTabTask extends Task<Void> {
 
-    private final TableView<DataSetFX> table;
     private final TabPane tabPane;
     private final List<DataSetFX> dataSets;
 
     public AddWikiMultipleStocksTabTask(TableView<DataSetFX> table, TabPane tabPane, List<DataSetFX> dataSets) {
-        this.table = table;
         this.tabPane = tabPane;
         this.dataSets = dataSets;
     }
@@ -42,38 +36,28 @@ public class AddWikiMultipleStocksTabTask extends Task<Void> {
     @Override
     protected Void call() throws Exception {
 
-        System.out.println("Starting Multiple Stock from thread " + Thread.currentThread().getName());
-
         final WIKIConnector connector = new WIKIConnector();
         final Map<DataSetFX, List<Stock>> map = new HashMap<>();
         final Map<DataSetFX, List<WIKIStockFX>> mapfx = new HashMap<>();
-        
+
 //        Create map
-        try {
-            for (DataSetFX dsfx : dataSets) {
-                List<Stock> tmp = connector.getStocks(dsfx.getCode());
-                if (tmp != null) {
-                    Collections.sort(tmp);
-                    map.put(dsfx, tmp);
-                }
-            }
-        } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
+        for (DataSetFX dsfx : dataSets) {
+            List<Stock> tmp = connector.getStocks(dsfx.getCode());
+            map.put(dsfx, tmp);
         }
 
 //        Create mapfx
-        Set<DataSetFX> keys = map.keySet();
-        for (DataSetFX key : keys) {
-            List<WIKIStockFX> wikisfxs = new ArrayList<>();
+        for (DataSetFX key : dataSets) {
+            List<WIKIStockFX> stockFXs = new ArrayList<>();
             List<Stock> stocks = map.get(key);
-            for (Stock stock : stocks) {
-                WIKIStockFX wikisfx = new WIKIStockFX(stock);
-                wikisfxs.add(wikisfx);
-            }
-            mapfx.put(key, wikisfxs);
-        }
 
-        System.out.println("Nothing to do");
+            for (Stock stock : stocks) {
+                WIKIStockFX stockFX = new WIKIStockFX(stock);
+                stockFXs.add(stockFX);
+            }
+
+            mapfx.put(key, stockFXs);
+        }
 
         Collection<List<WIKIStockFX>> r = mapfx.values();
         Object[] r1 = r.toArray();
@@ -109,6 +93,5 @@ public class AddWikiMultipleStocksTabTask extends Task<Void> {
 
         return null;
     }
-
 
 }

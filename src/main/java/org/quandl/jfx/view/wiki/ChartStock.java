@@ -25,6 +25,7 @@ public class ChartStock {
         yAxis.setLabel("Price");
         xAxis.setLabel("Date");
         xAxis.setForceZeroInRange(false);
+        yAxis.setForceZeroInRange(false);
         lineChart = new LineChart<Number, Number>(xAxis, yAxis);
         lineChart.setCreateSymbols(false);
         series.setName("My portfolio");
@@ -63,13 +64,10 @@ public class ChartStock {
 
         Collections.sort(stocks);
 
-        Stock first = stocks.get(0);
-        Stock last = stocks.get(stocks.size() - 1);
-
         for (Stock stock : stocks) {
             series.getData().add(new XYChart.Data(stock.convertDateToLong(), stock.getClose()));
         }
-
+        
         lineChart.getData().add(series);
         series.getNode().setStyle("-fx-stroke-width: 1px;");
     }

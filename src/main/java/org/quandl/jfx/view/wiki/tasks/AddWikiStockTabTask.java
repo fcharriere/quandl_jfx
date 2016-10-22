@@ -23,12 +23,10 @@ import org.quandl.jfx.view.wiki.WIKIStockFX;
  */
 public class AddWikiStockTabTask extends Task<Void> {
 
-    private final TableView<DataSetFX> table;
     private final TabPane tabPane;
     private final DataSetFX data;
 
     public AddWikiStockTabTask(TableView<DataSetFX> table, TabPane tabPane, DataSetFX data) {
-        this.table = table;
         this.tabPane = tabPane;
         this.data = data;
     }

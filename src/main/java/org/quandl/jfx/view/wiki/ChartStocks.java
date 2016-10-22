@@ -27,6 +27,7 @@ public class ChartStocks {
         yAxis.setLabel("Price");
         xAxis.setLabel("Date");
         xAxis.setForceZeroInRange(false);
+        yAxis.setForceZeroInRange(false);
         lineChart = new LineChart<Number, Number>(xAxis, yAxis);
         lineChart.setCreateSymbols(false);
         setTickLabelFormatter(xAxis);
@@ -58,14 +59,17 @@ public class ChartStocks {
     public void updateChart(Map<DataSetFX, List<Stock>> map) {
 
         Set<DataSetFX> keys = map.keySet();
+
         for (DataSetFX key : keys) {
             XYChart.Series series = new XYChart.Series();
             series.setName(key.getCode());
             List<Stock> ls = map.get(key);
             Collections.sort(ls);
+
             for (Stock stock : ls) {
                 series.getData().add(new XYChart.Data(stock.convertDateToLong(), stock.getClose()));
             }
+
             lineChart.getData().add(series);
             series.getNode().setStyle("-fx-stroke-width: 1px;");
         }
