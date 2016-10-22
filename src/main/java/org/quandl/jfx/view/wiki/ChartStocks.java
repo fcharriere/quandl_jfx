@@ -4,30 +4,31 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.util.StringConverter;
 import org.quandl.jfx.model.wiki.Stock;
+import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 
 /**
  *
  * @author frederic
  */
-public class ChartStock {
+public class ChartStocks {
 
     private final NumberAxis xAxis = new NumberAxis();
     private final NumberAxis yAxis = new NumberAxis();
     private final LineChart<Number, Number> lineChart;
-    private final XYChart.Series series = new XYChart.Series();
 
-    public ChartStock() {
+    public ChartStocks() {
         yAxis.setLabel("Price");
         xAxis.setLabel("Date");
         xAxis.setForceZeroInRange(false);
         lineChart = new LineChart<Number, Number>(xAxis, yAxis);
         lineChart.setCreateSymbols(false);
-        series.setName("My portfolio");
         setTickLabelFormatter(xAxis);
         xAxis.setTickLabelRotation(60);
     }
@@ -50,28 +51,25 @@ public class ChartStock {
                 return (double) localDate.toEpochDay();
             }
         };
-        
+
         xAxis.setTickLabelFormatter(converter);
     }
 
-    public ChartStock(String def) {
-        this();
-        series.setName(def);
-    }
+    public void updateChart(Map<DataSetFX, List<Stock>> map) {
 
-    public void updateChart(List<Stock> stocks) {
-
-        Collections.sort(stocks);
-
-        Stock first = stocks.get(0);
-        Stock last = stocks.get(stocks.size() - 1);
-
-        for (Stock stock : stocks) {
-            series.getData().add(new XYChart.Data(stock.convertDateToLong(), stock.getClose()));
+        Set<DataSetFX> keys = map.keySet();
+        for (DataSetFX key : keys) {
+            XYChart.Series series = new XYChart.Series();
+            series.setName(key.getCode());
+            List<Stock> ls = map.get(key);
+            Collections.sort(ls);
+            for (Stock stock : ls) {
+                series.getData().add(new XYChart.Data(stock.convertDateToLong(), stock.getClose()));
+            }
+            lineChart.getData().add(series);
+            series.getNode().setStyle("-fx-stroke-width: 1px;");
         }
 
-        lineChart.getData().add(series);
-        series.getNode().setStyle("-fx-stroke-width: 1px;");
     }
 
     public LineChart<Number, Number> getLineChart() {

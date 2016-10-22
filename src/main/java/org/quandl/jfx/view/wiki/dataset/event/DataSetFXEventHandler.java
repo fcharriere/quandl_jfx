@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import org.quandl.jfx.view.wiki.dataset.DataSetFX;
+import org.quandl.jfx.view.wiki.tasks.AddWikiMultipleStocksTabTask;
 import org.quandl.jfx.view.wiki.tasks.AddWikiStockTabTask;
 
 /**
@@ -32,13 +33,28 @@ public class DataSetFXEventHandler implements EventHandler<ActionEvent> {
             return;
         }
 
-        DataSetFX newValue = dss.get(0);
+        if (dss.size() == 1) {
+            DataSetFX newValue = dss.get(0);
 
-        Task task = new AddWikiStockTabTask(table, tabPane, newValue);
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+            Task task = new AddWikiStockTabTask(table, tabPane, newValue);
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
+            return;
+        }
 
+        if (dss.size() > 1) {
+//            Task task = new AddWikiStockTabTask(table, tabPane, newValue);
+            System.out.println("Multiple stocks");
+            Task task = new AddWikiMultipleStocksTabTask(table, tabPane, dss);
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
+            return;
+        }
+
+        System.out.println("You should not be here");
+        
     }
 
 }

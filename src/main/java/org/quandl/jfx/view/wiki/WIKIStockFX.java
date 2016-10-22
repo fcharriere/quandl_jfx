@@ -1,5 +1,7 @@
 package org.quandl.jfx.view.wiki;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import org.quandl.jfx.model.wiki.Stock;
@@ -8,7 +10,7 @@ import org.quandl.jfx.model.wiki.Stock;
  *
  * @author frederic
  */
-public class WIKIStockFX {
+public class WIKIStockFX implements Comparable<WIKIStockFX> {
 
     private final SimpleStringProperty date;
     private final SimpleDoubleProperty open;
@@ -24,9 +26,9 @@ public class WIKIStockFX {
     private final SimpleDoubleProperty adjClose;
     private final SimpleDoubleProperty adjVolume;
 
-    public WIKIStockFX(String date, Double open, Double high, Double low, 
-            Double close, Double volume, Double exDividend, Double splitRatio, 
-            Double adjOpen, Double adjHigh, Double adjLow, Double adjClose, 
+    public WIKIStockFX(String date, Double open, Double high, Double low,
+            Double close, Double volume, Double exDividend, Double splitRatio,
+            Double adjOpen, Double adjHigh, Double adjLow, Double adjClose,
             Double adjVolume) {
         this.date = new SimpleStringProperty(date);
         this.open = new SimpleDoubleProperty(open);
@@ -42,12 +44,35 @@ public class WIKIStockFX {
         this.adjClose = new SimpleDoubleProperty(adjClose);
         this.adjVolume = new SimpleDoubleProperty(adjVolume);
     }
-    
-    public WIKIStockFX(Stock stock){
-        this(stock.getDate(),stock.getOpen(),stock.getHigh(),stock.getLow(),
-                stock.getClose(),stock.getVolume(),stock.getExDividend(),stock.getSplitRatio(),
-                stock.getAdjOpen(),stock.getAdjHigh(),stock.getAdjLow(),stock.getAdjClose(),
+
+    public WIKIStockFX(Stock stock) {
+        this(stock.getDate(), stock.getOpen(), stock.getHigh(), stock.getLow(),
+                stock.getClose(), stock.getVolume(), stock.getExDividend(), stock.getSplitRatio(),
+                stock.getAdjOpen(), stock.getAdjHigh(), stock.getAdjLow(), stock.getAdjClose(),
                 stock.getAdjVolume());
+    }
+
+    @Override
+    public int compareTo(WIKIStockFX o) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(this.date.get(), formatter);
+        LocalDate foreignDate = LocalDate.parse(o.getDate(), formatter);
+
+        return localDate.compareTo(foreignDate);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(this.date.get(), formatter);
+        LocalDate foreignDate = LocalDate.parse(((WIKIStockFX)obj).getDate(), formatter);
+
+        return localDate.compareTo(foreignDate) == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "WIKIStockFX{" + "date=" + date + ", close=" + close + '}';
     }
 
     public String getDate() {
@@ -101,7 +126,5 @@ public class WIKIStockFX {
     public Double getAdjVolume() {
         return adjVolume.get();
     }
-    
-    
-    
+
 }

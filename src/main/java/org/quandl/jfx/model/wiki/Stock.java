@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
  */
 public class Stock implements Comparable<Stock> {
 
-//    private final LocalDate date;
     private final String date;
     private final Double open;
     private final Double high;
@@ -46,13 +45,6 @@ public class Stock implements Comparable<Stock> {
     public static Stock stockFromString(String input) {
         String[] inputs = input.split(",");
 
-//        String dateString = inputs[0];
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        LocalDate localDate = LocalDate.parse(dateString, formatter);
-//
-//        LocalDate date = localDate;
-//        System.out.println(input);
-
         String date = inputs[0];
         Double open = inputs[1].isEmpty() ? 0D : Double.parseDouble(inputs[1]);
         Double high = inputs[2].isEmpty() ? 0D : Double.parseDouble(inputs[2]);
@@ -70,13 +62,18 @@ public class Stock implements Comparable<Stock> {
         return new Stock(date, open, high, low, close, volume, exDividend, splitRatio, adjOpen, adjHigh, adjLow, adjClose, adjVolume);
     }
 
+    public long convertDateToLong() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(this.getDate(), formatter);
+        return localDate.toEpochDay();
+    }
+
     @Override
     public int compareTo(Stock o) {
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(this.date, formatter);
-        LocalDate foreignDate = LocalDate.parse(o.getDate(),formatter);
-        
+        LocalDate foreignDate = LocalDate.parse(o.getDate(), formatter);
+
         return localDate.compareTo(foreignDate);
     }
 
