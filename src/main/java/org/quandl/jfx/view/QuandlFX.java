@@ -1,5 +1,6 @@
 package org.quandl.jfx.view;
 
+import java.sql.SQLException;
 import java.util.List;
 import org.quandl.jfx.view.wiki.dataset.DataSetFX;
 import javafx.application.Application;
@@ -7,7 +8,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -30,11 +30,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.quandl.jfx.model.wiki.DataSet;
+import org.quandl.jfx.utils.Utils;
+import org.quandl.jfx.utils.connectors.db.DBConnector;
 import org.quandl.jfx.view.wiki.dataset.DataSetTableViewSkin;
 import org.quandl.jfx.view.wiki.dataset.event.DataSetFXEventHandler;
 import org.quandl.jfx.view.wiki.dataset.listener.DataSetFilterListener;
-import org.quandl.jfx.view.wiki.dataset.task.CreateWIKIDBTask;
-import org.quandl.jfx.view.wiki.tasks.AddWikiStockTabTask;
+import org.quandl.jfx.view.wiki.tasks.LoadDataSetTask;
 
 /**
  *
@@ -48,10 +50,31 @@ public class QuandlFX extends Application {
     private final ObservableList<DataSetFX> complete_data = FXCollections.observableArrayList();
 
     @Override
+    public void init() throws Exception {
+        Utils util = new Utils();
+        List<DataSet> dss = util.readWikiDataSets();
+
+        Boolean togo = false;
+
+        try {
+            System.out.println("creating database ...");
+            DBConnector connector = new DBConnector();
+            togo = connector.createTables();
+            if (togo) {
+                connector.insertDataSet(dss);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+    }
+
+    @Override
     public void start(Stage primaryStage) {
 
-//        setUserAgentStylesheet(STYLESHEET_CASPIAN);
-
+        Thread thread = new Thread(new LoadDataSetTask(data, complete_data));
+        thread.setDaemon(true);
+        thread.start();
+        
         table.setEditable(true);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -87,18 +110,19 @@ public class QuandlFX extends Application {
         });
 
 //        LEFT
-
         HBox hbox = new HBox();
-        
+
         TextField textField = new TextField();
         textField.textProperty().addListener(new DataSetFilterListener(data, complete_data));
         hbox.setHgrow(textField, Priority.ALWAYS);
 
-        Button clearTextFieldButton = new Button("",new ImageView(new Image("icons/ic_close_black_18dp.png", 14, 14, false, false)));
-        hbox.getChildren().addAll(textField,clearTextFieldButton);
-        
-        clearTextFieldButton.setOnAction((ActionEvent event) -> { textField.clear();});
-        
+        Button clearTextFieldButton = new Button("", new ImageView(new Image("icons/ic_close_black_18dp.png", 14, 14, false, false)));
+        hbox.getChildren().addAll(textField, clearTextFieldButton);
+
+        clearTextFieldButton.setOnAction((ActionEvent event) -> {
+            textField.clear();
+        });
+
         Button selectDataSetButton = new Button("Select");
         selectDataSetButton.setPrefHeight(50D);
         selectDataSetButton.setPrefWidth(Double.MAX_VALUE);
@@ -117,7 +141,6 @@ public class QuandlFX extends Application {
         VBox vBox = new VBox();
         VBox.setVgrow(table, Priority.ALWAYS);
         vBox.getChildren().addAll(hbox, table, selectDataSetButton);
-//        vBox.getChildren().addAll(textField, table, selectDataSetButton);
         vBox.setStyle("-fx-background-color: #336699;");
         vBox.setPrefWidth(500D);
 
@@ -133,10 +156,6 @@ public class QuandlFX extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
-
-        Thread t = new Thread(new CreateWIKIDBTask(data, complete_data));
-        t.setDaemon(true);
-        t.start();
 
         table.setSkin(new DataSetTableViewSkin(table));
 

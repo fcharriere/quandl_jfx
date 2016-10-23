@@ -31,6 +31,10 @@
                         <manifest>
                             <mainClass>org.quandl.jfx.view.QuandlFX</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <JavaFX-Preloader-Class>org.quandl.jfx.view.Splash</JavaFX-Preloader-Class>
+                            <JavaFX-Application-Class>org.quandl.jfx.view.QuandlFX</JavaFX-Application-Class>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -41,6 +45,10 @@
                         <manifest>
                             <mainClass>org.quandl.jfx.view.QuandlFX</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <JavaFX-Preloader-Class>org.quandl.jfx.view.Splash</JavaFX-Preloader-Class>
+                            <JavaFX-Application-Class>org.quandl.jfx.view.QuandlFX</JavaFX-Application-Class>
+                        </manifestEntries>
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>

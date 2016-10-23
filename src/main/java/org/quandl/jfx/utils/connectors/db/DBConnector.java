@@ -75,7 +75,6 @@ public class DBConnector {
                 statement.setString(1, ds.getCode());
                 statement.setString(2, ds.getDescription());
                 statement.executeUpdate();
-                System.out.println("inserted " + ds.getDescription());
             }
 
         } catch (SQLException sqle) {
