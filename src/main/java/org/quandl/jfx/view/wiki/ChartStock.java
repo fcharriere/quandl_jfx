@@ -15,12 +15,12 @@ import org.quandl.jfx.model.wiki.Stock;
  * @author frederic
  */
 public class ChartStock {
-
+    
     private final NumberAxis xAxis = new NumberAxis();
     private final NumberAxis yAxis = new NumberAxis();
     private final LineChart<Number, Number> lineChart;
     private final XYChart.Series series = new XYChart.Series();
-
+    
     public ChartStock() {
         yAxis.setLabel("Price");
         xAxis.setLabel("Date");
@@ -31,12 +31,13 @@ public class ChartStock {
         series.setName("My portfolio");
         setTickLabelFormatter(xAxis);
         xAxis.setTickLabelRotation(60);
+        lineChart.setAnimated(true);
     }
-
+    
     private void setTickLabelFormatter(NumberAxis xAxis) {
-
+        
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+        
         StringConverter converter = new StringConverter() {
             @Override
             public String toString(Object object) {
@@ -44,7 +45,7 @@ public class ChartStock {
                 LocalDate localDate = LocalDate.ofEpochDay(obj);
                 return localDate.format(formatter);
             }
-
+            
             @Override
             public Object fromString(String string) {
                 LocalDate localDate = LocalDate.parse(string, formatter);
@@ -54,16 +55,16 @@ public class ChartStock {
         
         xAxis.setTickLabelFormatter(converter);
     }
-
+    
     public ChartStock(String def) {
         this();
         series.setName(def);
     }
-
+    
     public void updateChart(List<Stock> stocks) {
-
+        
         Collections.sort(stocks);
-
+        
         for (Stock stock : stocks) {
             series.getData().add(new XYChart.Data(stock.convertDateToLong(), stock.getClose()));
         }
@@ -71,9 +72,9 @@ public class ChartStock {
         lineChart.getData().add(series);
         series.getNode().setStyle("-fx-stroke-width: 1px;");
     }
-
+    
     public LineChart<Number, Number> getLineChart() {
         return this.lineChart;
     }
-
+    
 }
