@@ -1,3 +1,5 @@
 /target/
 QUANDL/
 derby.log
+*iml
+.idea/
